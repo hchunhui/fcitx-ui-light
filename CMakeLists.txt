@@ -1,7 +1,7 @@
 project(fcitx-light-ui)
 cmake_minimum_required(VERSION 2.6)
 FIND_PACKAGE(Gettext REQUIRED)
-FIND_PACKAGE(Fcitx4 REQUIRED)
+FIND_PACKAGE(Fcitx REQUIRED)
 FIND_PACKAGE(X11 REQUIRED)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
