@@ -165,7 +165,7 @@ void DrawMainWindow (MainWindow* mainWindow)
             }
 
             if (GetCurrentState(instance) != IS_ACTIVE )
-                imicon = LoadImage(lightui, "eng");
+                imicon = LoadImage(lightui, "en");
             else
             {
                 FcitxIM* im = GetCurrentIM(instance);
