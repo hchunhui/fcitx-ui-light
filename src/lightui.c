@@ -41,7 +41,6 @@
 #include "MainWindow.h"
 #include "TrayWindow.h"
 #include "MenuWindow.h"
-#include "MessageWindow.h"
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
 #include "font.h"
@@ -132,7 +131,6 @@ void* LightUICreate(FcitxInstance* instance)
     lightui->inputWindow = CreateInputWindow(lightui);
     lightui->mainWindow = CreateMainWindow(lightui);
     lightui->trayWindow = CreateTrayWindow(lightui);
-    lightui->messageWindow = CreateMessageWindow(lightui);
     lightui->mainMenuWindow = CreateMainMenuWindow(lightui);
 
     FcitxIMEventHook resethk;
@@ -336,9 +334,7 @@ void LightUIOnTriggerOff(void* arg)
 
 void LightUIDisplayMessage(void* arg, char* title, char** msg, int length)
 {
-    FcitxLightUI* lightui = (FcitxLightUI*) arg;
-    XMapRaised(lightui->dpy, lightui->messageWindow->window);
-    DrawMessageWindow(lightui->messageWindow, title, msg, length);
+    return;
 }
 
 boolean MainMenuAction(FcitxUIMenu* menu, int index)

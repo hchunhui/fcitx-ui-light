@@ -62,7 +62,6 @@ typedef struct _FcitxLightUI {
     Atom killAtom;
     struct _InputWindow* inputWindow;
     struct _MainWindow* mainWindow;
-    struct _MessageWindow* messageWindow;
     struct _TrayWindow* trayWindow;
     struct _AboutWindow* aboutWindow;
 
