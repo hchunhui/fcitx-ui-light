@@ -33,7 +33,7 @@
 #include <pango/pangocairo.h>
 #endif
 
-#include "skin.h"
+#include "draw.h"
 #include <fcitx/module/x11/x11stuff.h>
 #include <X11/Xft/Xft.h>
 

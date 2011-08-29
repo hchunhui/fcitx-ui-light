@@ -5,7 +5,7 @@ set(FCITX_LIGHT_UI_SRCS
     lightuiconfig.c
     MenuWindow.c
     MessageWindow.c
-    skin.c
+    draw.c
     tray.c
     TrayWindow.c
     MainWindow.c

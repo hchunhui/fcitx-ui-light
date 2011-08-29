@@ -49,72 +49,67 @@ Description=Background Color
 
 [LightUI/BorderColor]
 Type=Color
-DefaultValue=127 127 127
+DefaultValue=197 200 191
 Description=Border Color
-
-[LightUI/FontColor]
-Type=Color
-DefaultValue=0 0 0
-Description=Font Color
 
 [LightUI/TipColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=2 89 196
 Description=Tip Message Color
 
 [LightUI/InputColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=255 0 132
 Description=Input Message Color
 
 [LightUI/IndexColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=0 66 200
 Description=Candidate Index Color
 
 [LightUI/FirstCandColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=0 99 200
 Description=First Candidate Color
 
 [LightUI/UserPhraseColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=0 99 200
 Description=User Phrase Color
 
 [LightUI/CodeColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=255 0 132
 Description=Table Code Color
 
 [LightUI/OtherColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=56 134 230
 Description=Other Color
 
 [LightUI/ActiveMenuColor]
 Type=Color
-DefaultValue=255 255 255
+DefaultValue=0 99 200
 Description=Active Menu Item Character Color
 
 [LightUI/InactiveMenuColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=0 99 200
 Description=Inactive Menu Item Character Color
 
 [LightUI/ActiveColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=197 200 191
 Description=Active Menu Color
 
 [LightUI/LineColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=197 200 191
 Description=Space Line Color
 
 [LightUI/CursorColor]
 Type=Color
-DefaultValue=0 0 0
+DefaultValue=40 40 240
 Description=Cursor Color
 
 [DescriptionFile]

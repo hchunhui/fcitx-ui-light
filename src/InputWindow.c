@@ -34,7 +34,7 @@
 
 #include "InputWindow.h"
 #include "lightui.h"
-#include "skin.h"
+#include "draw.h"
 #include <fcitx/module/x11/x11stuff.h>
 #include "MainWindow.h"
 #include <fcitx-utils/log.h>

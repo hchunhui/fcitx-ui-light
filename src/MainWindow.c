@@ -41,7 +41,7 @@
 #include "fcitx-utils/log.h"
 #include "fcitx/module/x11/x11stuff.h"
 #include "lightui.h"
-#include "skin.h"
+#include "draw.h"
 #include "MenuWindow.h"
 #include <fcitx-utils/utils.h>
 

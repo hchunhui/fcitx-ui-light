@@ -32,7 +32,7 @@
 
 #include "TrayWindow.h"
 #include "tray.h"
-#include "skin.h"
+#include "draw.h"
 #include "lightui.h"
 #include "fcitx/module/x11/x11stuff.h"
 #include "fcitx-utils/log.h"

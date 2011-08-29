@@ -28,17 +28,17 @@
 #include <fcitx/module.h>
 #include <fcitx/module/x11/x11stuff.h>
 
-#include "skin.h"
+#include "draw.h"
 #include "lightui.h"
 #include "MenuWindow.h"
 #include <fcitx/instance.h>
 #include <fcitx-utils/utils.h>
 #include "font.h"
 
-#define MenuMarginTop 1
-#define MenuMarginRight 1
-#define MenuMarginLeft 1
-#define MenuMarginBottom 1
+#define MenuMarginTop 5
+#define MenuMarginRight 5
+#define MenuMarginLeft 5
+#define MenuMarginBottom 5
 #define MenuFontSize FontHeight(menu->owner->dpy, menu->owner->xftfont)
 
 static boolean ReverseColor(XlibMenu * Menu,int shellIndex);
@@ -373,12 +373,27 @@ void DrawDivLine(XlibMenu * menu,int line_y)
 {
     int marginLeft = MenuMarginLeft;
     int marginRight = MenuMarginRight;
+
+    GC gc = LightUICreateGC(menu->owner->dpy, menu->pixmap, menu->owner->lineColor);
+    XDrawLine(menu->owner->dpy, menu->pixmap, gc, marginLeft + 3, line_y + 3, menu->width - marginRight, line_y + 3);
+    XFreeGC(menu->owner->dpy, gc);
 }
 
 void MenuMark(XlibMenu * menu,int y,int i)
 {
     int marginLeft = MenuMarginLeft;
-    double size = (MenuFontSize * 0.7 ) / 2;
+    double size = (MenuFontSize * 0.7 );
+    GC gc;
+    if (GetMenuShell(menu->menushell, i)->isselect == 0)
+    {
+        gc = LightUICreateGC(menu->owner->dpy, menu->pixmap, menu->owner->menuFontColor[MENU_INACTIVE]);
+    }
+    else
+    {
+        gc = LightUICreateGC(menu->owner->dpy, menu->pixmap, menu->owner->menuFontColor[MENU_ACTIVE]);
+    }
+    XFillArc(menu->owner->dpy, menu->pixmap, gc, marginLeft + 7 - size / 2, y + (menu->owner->fontSize / 2), size , size, 0, 64 * 360);
+    XFreeGC(menu->owner->dpy, gc);
 }
 
 /*
@@ -409,6 +424,14 @@ void DrawArrow(XlibMenu *menu, int line_y)
     int marginRight = MenuMarginRight;
     double size = MenuFontSize * 0.4;
     double offset = (MenuFontSize - size) / 2;
+    GC gc = LightUICreateGC(menu->owner->dpy, menu->pixmap, menu->owner->menuFontColor[MENU_ACTIVE]);
+    XPoint point[3] = {
+        {menu->width - marginRight - 1 - size, line_y + offset},
+        {menu->width - marginRight - 1 - size, line_y+size * 2 + offset},
+        {menu->width - marginRight - 1, line_y + size + offset}
+    };
+    XFillPolygon(menu->owner->dpy, menu->pixmap, gc, point, 3, Convex, CoordModeOrigin);
+    XFreeGC(menu->owner->dpy, gc);
 }
 
 /**
