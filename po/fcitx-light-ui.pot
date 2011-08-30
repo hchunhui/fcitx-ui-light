@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-29 08:34+0800\n"
+"POT-Creation-Date: 2011-08-30 11:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,55 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx-light-ui/build/po/tmp/fcitx-light-ui.conf.in.h:1
 msgid "Light UI"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/InputWindow.c:164
+msgid "DISPLAY InputWindow"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/MainWindow.c:134
+msgid "DISPLAY MainWindow"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/MainWindow.c:149
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/MainWindow.c:242
+msgid "DRAW MainWindow"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/font.c:26
+msgid "Error: Load fontconfig failed"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/font.c:70
+#, c-format
+msgid "your current font is: %s"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/font.c:87
+msgid "no valid font."
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/lightui.c:124
+msgid "Configure"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/lightui.c:125
+msgid "Exit"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/lightui.c:268
+#, c-format
+msgid "Load Config File %s"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/lightui.c:358
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/lightui.c:365
+msgid "Unable to create process"
+msgstr ""
+
+#: /home/saber/Develop/fcitx-light-ui/build/po/../..//src/tray.c:167
+#, c-format
+msgid "X error %i on opcode send"
 msgstr ""
 
 #: ../..//data/fcitx-light.desktop.in.h:1
