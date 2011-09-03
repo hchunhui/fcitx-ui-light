@@ -71,7 +71,6 @@ void InitMainWindow(MainWindow* mainWindow)
     Visual * vs;
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
-    GC gc;
     char        strWindowName[] = "Fcitx Main Window";
     int swidth, sheight;
     XGCValues xgv;

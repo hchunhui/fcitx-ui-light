@@ -47,7 +47,6 @@ void InitTrayWindow(TrayWindow *trayWindow)
 {
     FcitxLightUI *lightui = trayWindow->owner;
     Display *dpy = lightui->dpy;
-    int iScreen = lightui->iScreen;
     char   strWindowName[]="Fcitx Tray Window";
     if ( !lightui->bUseTrayIcon )
         return;
@@ -118,10 +117,7 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
     FcitxLightUI *lightui = trayWindow->owner;
     Display *dpy = lightui->dpy;
     char *name = NULL;
-    XImage* tray = NULL;
-    XImage* mask = NULL;
 
-    int f_state;
     if ( !lightui->bUseTrayIcon )
         return;
 

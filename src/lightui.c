@@ -85,7 +85,6 @@ FcitxUI ui = {
 
 void* LightUICreate(FcitxInstance* instance)
 {
-    FcitxAddon* lightuiaddon = GetAddonByName(&instance->addons, FCITX_LIGHT_UI_NAME);
     FcitxModuleFunctionArg arg;
     FcitxLightUI* lightui = fcitx_malloc0(sizeof(FcitxLightUI));
     lightui->owner = instance;
@@ -189,7 +188,6 @@ static void LightUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 
 static void LightUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
-    FcitxLightUI* lightui = (FcitxLightUI*) arg;
     status->priv = fcitx_malloc0(sizeof(FcitxLightUIStatus));
     char activename[PATH_MAX], inactivename[PATH_MAX];
     sprintf(activename, "%s_active.png", status->name);
@@ -448,7 +446,6 @@ GC LightUICreateGC(Display* dpy, Drawable drawable, ConfigColor color)
 
 void LightUISetGC(Display* dpy, GC gc, ConfigColor color)
 {
-    XGCValues gcvalues;
     XColor xcolor;
     xcolor.red = color.r * 65535;
     xcolor.green = color.g * 65535;

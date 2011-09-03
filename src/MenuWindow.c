@@ -67,8 +67,6 @@ void InitXlibMenu(XlibMenu* menu)
     int depth;
     Colormap cmap;
     Visual * vs;
-    XGCValues xgv;
-    GC gc;
     Display* dpy = lightui->dpy;
     int iScreen = lightui->iScreen;
 
