@@ -5,8 +5,8 @@ FIND_PACKAGE(Fcitx REQUIRED)
 FIND_PACKAGE(X11 REQUIRED)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
-pkg_check_modules(FONTCONFIG "fontconfig")
-pkg_check_modules(FREETYPE2 "freetype2")
+pkg_check_modules(FONTCONFIG "fontconfig" REQUIRED)
+pkg_check_modules(FREETYPE2 "freetype2" REQUIRED)
 
 # uninstall target
 configure_file(

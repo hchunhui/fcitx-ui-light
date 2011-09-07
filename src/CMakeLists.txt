@@ -4,7 +4,6 @@ set(FCITX_LIGHT_UI_SRCS
     lightui.c
     lightuiconfig.c
     MenuWindow.c
-
     draw.c
     tray.c
     TrayWindow.c
@@ -22,12 +21,19 @@ include_directories(${FCITX4_FCITX_INCLUDE_DIRS}
                     ${X11_Xpm_INCLUDE_PATH}
                     ${FREETYPE2_INCLUDE_DIRS})
 
+link_directories(
+    ${FCITX4_FCITX_LIBRARY_DIRS}
+    ${FCITX4_FCITX_UTILS_LIBRARY_DIRS}
+    ${FCITX4_FCITX_CONFIG_LIBRARY_DIRS}
+    )
+
 add_definitions( -DLOCALEDIR=\"${CMAKE_INSTALL_PREFIX}/share/locale\" )
 
 fcitx_add_addon(fcitx-light-ui ${FCITX_LIGHT_UI_SRCS})
 target_link_libraries(fcitx-light-ui
                       ${FCITX4_FCITX_LIBRARIES}
                       ${FCITX4_FCITX_CONFIG_LIBRARIES}
+                      ${FCITX4_FCITX_UTILS_LIBRARIES}
                       ${X11_LIBRARIES}
                       ${X11_Xpm_LIB}
                       ${FONTCONFIG_LIBRARIES}
