@@ -39,4 +39,5 @@ target_link_libraries(fcitx-light-ui
                       ${X11_Xpm_LIB}
                       ${FONTCONFIG_LIBRARIES}
                       ${X11_Xft_LIB}
+                      ${LIBINTL_LIBRARIES}
 )
