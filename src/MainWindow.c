@@ -73,7 +73,6 @@ void InitMainWindow(MainWindow* mainWindow)
     unsigned long   attribmask;
     char        strWindowName[] = "Fcitx Main Window";
     int swidth, sheight;
-    XGCValues xgv;
     Display* dpy = lightui->dpy;
     int iScreen = lightui->iScreen;
     mainWindow->dpy = dpy;
@@ -94,7 +93,6 @@ void InitMainWindow(MainWindow* mainWindow)
     if (mainWindow->window == None)
         return;
 
-    xgv.foreground = WhitePixel(dpy, iScreen);
     mainWindow->pm_main_bar = XCreatePixmap(
                                   dpy,
                                   mainWindow->window,

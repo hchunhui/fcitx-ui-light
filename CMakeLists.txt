@@ -1,12 +1,15 @@
 project(fcitx-light-ui)
 cmake_minimum_required(VERSION 2.6)
+
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+FIND_PACKAGE(Libintl REQUIRED)
 FIND_PACKAGE(Gettext REQUIRED)
 FIND_PACKAGE(Fcitx REQUIRED)
 FIND_PACKAGE(X11 REQUIRED)
 FIND_PACKAGE(PkgConfig REQUIRED)
 
-pkg_check_modules(FONTCONFIG "fontconfig")
-pkg_check_modules(FREETYPE2 "freetype2")
+pkg_check_modules(FONTCONFIG "fontconfig" REQUIRED)
+pkg_check_modules(FREETYPE2 "freetype2" REQUIRED)
 
 # uninstall target
 configure_file(
