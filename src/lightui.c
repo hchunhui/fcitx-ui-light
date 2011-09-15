@@ -110,9 +110,10 @@ void* LightUICreate(FcitxInstance* instance)
     utarray_init(&lightui->mainMenu.shell, &menuICD);
 
     FcitxUIMenu **menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
         FcitxUIMenu * menup = *menupp;

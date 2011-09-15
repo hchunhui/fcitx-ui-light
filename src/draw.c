@@ -173,7 +173,7 @@ void DrawInputBar(InputWindow* inputWindow, int iCursorPos, Messages * msgup, Me
     int cursor_pos=0;
     int inputWidth = 0, outputWidth = 0;
     int outputHeight = 0;
-    FcitxInputState* input = &inputWindow->owner->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(inputWindow->owner->owner);
     FcitxInstance* instance = inputWindow->owner->owner;
     int iChar = iCursorPos;
     int strWidth = 0, strHeight = 0;
@@ -198,7 +198,7 @@ void DrawInputBar(InputWindow* inputWindow, int iCursorPos, Messages * msgup, Me
 
         posUpY[i] = MarginTop + InputPos - strHeight;
         inputWidth += strWidth;
-        if (input->bShowCursor)
+        if (FcitxInputStateGetShowCursor(input))
         {
             int length = strlen(GetMessageString(msgup, i));
             if (iChar >= 0)
@@ -305,7 +305,7 @@ void DrawInputBar(InputWindow* inputWindow, int iCursorPos, Messages * msgup, Me
             0, 0
              );
     XFreeGC(inputWindow->dpy, gc);
-    if (input->bShowCursor )
+    if (FcitxInputStateGetShowCursor(input))
     {
         //画向前向后箭头
     }
@@ -325,7 +325,7 @@ void DrawInputBar(InputWindow* inputWindow, int iCursorPos, Messages * msgup, Me
     }
 
     //画光标
-    if (input->bShowCursor )
+    if (FcitxInputStateGetShowCursor(input))
     {
         GC gc = LightUICreateGC(inputWindow->dpy, inputWindow->pixmap, inputWindow->owner->cursorColor);
         XDrawLine(inputWindow->dpy, inputWindow->pixmap, gc, cursor_pos, MarginTop + InputPos,

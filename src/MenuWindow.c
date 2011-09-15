@@ -189,9 +189,10 @@ void CloseAllMenuWindow(FcitxLightUI *lightui)
 {
     FcitxInstance* instance = lightui->owner;
     FcitxUIMenu** menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
         XlibMenu* xlibMenu = (XlibMenu*) (*menupp)->uipriv;
@@ -236,9 +237,10 @@ boolean IsMouseInOtherMenu(XlibMenu *xlibMenu, int x, int y)
     FcitxLightUI *lightui = xlibMenu->owner;
     FcitxInstance* instance = lightui->owner;
     FcitxUIMenu** menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
 

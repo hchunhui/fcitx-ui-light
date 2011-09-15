@@ -176,9 +176,10 @@ void DrawMainWindow (MainWindow* mainWindow)
                 height = imageheight;
 
             FcitxUIStatus* status;
-            for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+            UT_array* uistats = FcitxInstanceGetUIStats(instance);
+            for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                    status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
                 boolean active = status->getCurrentStatus(status->arg);
@@ -209,9 +210,9 @@ void DrawMainWindow (MainWindow* mainWindow)
             UpdateStatusGeometry( &mainWindow->imiconstat, currentX, MarginTop);
             currentX += ICON_WIDTH;
 
-            for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+            for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                    status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
                 FcitxLightUIStatus* privstat = GetPrivateStatus(status);
@@ -314,9 +315,10 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     SwitchIM(instance, -1);
                 } else {
                     FcitxUIStatus *status;
-                    for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+                    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+                    for (status = (FcitxUIStatus*) utarray_front(uistats);
                             status != NULL;
-                            status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                            status = (FcitxUIStatus*) utarray_next(uistats, status)
                         )
                     {
                         FcitxLightUIStatus* privstat = GetPrivateStatus(status);
