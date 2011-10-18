@@ -127,7 +127,7 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
         name = "tray_inactive";
 
     LightUIImage* image = LoadImage(lightui, name);
-    if (image)
+    if (image && trayWindow->window != None)
     {
         DrawImage(dpy, trayWindow->window, image, 0, 0, trayWindow->size, trayWindow->size);
     }
