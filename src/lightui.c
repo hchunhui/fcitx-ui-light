@@ -193,9 +193,6 @@ static void LightUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 static void LightUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
     status->priv = fcitx_malloc0(sizeof(FcitxLightUIStatus));
-    char activename[PATH_MAX], inactivename[PATH_MAX];
-    sprintf(activename, "%s_active.png", status->name);
-    sprintf(inactivename, "%s_inactive.png", status->name);
 }
 
 static void LightUIOnInputFocus(void *arg)
