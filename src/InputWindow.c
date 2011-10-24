@@ -38,8 +38,6 @@
 #include <fcitx/module/x11/x11stuff.h>
 #include "MainWindow.h"
 #include <fcitx-utils/log.h>
-#include <cairo/cairo.h>
-#include <cairo/cairo-xlib.h>
 
 static boolean InputWindowEventHandler(void *arg, XEvent* event);
 static void InitInputWindow(InputWindow* inputWindow);
