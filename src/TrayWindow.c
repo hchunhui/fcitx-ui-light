@@ -93,7 +93,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
 }
 
 TrayWindow* CreateTrayWindow(FcitxLightUI *lightui) {
-    TrayWindow *trayWindow = fcitx_malloc0(sizeof(TrayWindow));
+    TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = lightui;
     FcitxModuleFunctionArg arg;
     arg.args[0] = TrayEventHandler;
@@ -121,7 +121,7 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
     if ( !lightui->bUseTrayIcon )
         return;
 
-    if (GetCurrentState(lightui->owner) == IS_ACTIVE)
+    if (FcitxInstanceGetCurrentState(lightui->owner) == IS_ACTIVE)
         name = "tray_active";
     else
         name = "tray_inactive";
@@ -187,11 +187,11 @@ boolean TrayEventHandler(void *arg, XEvent* event)
             switch (event->xbutton.button)
             {
             case Button1:
-                if (GetCurrentState(instance) == IS_CLOSED) {
-                    EnableIM(instance, GetCurrentIC(instance), false);
+                if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
+                    FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
                 }
                 else {
-                    CloseIM(instance, GetCurrentIC(instance));
+                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                 }
                 break;
             case Button3:

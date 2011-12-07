@@ -103,7 +103,7 @@ InputWindow* CreateInputWindow(FcitxLightUI *lightui)
 {
     InputWindow* inputWindow;
 
-    inputWindow = fcitx_malloc0(sizeof(InputWindow));
+    inputWindow = fcitx_utils_malloc0(sizeof(InputWindow));
     inputWindow->owner = lightui;
     InitInputWindow(inputWindow);
 
@@ -116,8 +116,8 @@ InputWindow* CreateInputWindow(FcitxLightUI *lightui)
     arg.args[1] = inputWindow;
     InvokeFunction(lightui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
 
-    inputWindow->msgUp = InitMessages();
-    inputWindow->msgDown = InitMessages();
+    inputWindow->msgUp = FcitxMessagesNew();
+    inputWindow->msgDown = FcitxMessagesNew();
     return inputWindow;
 }
 
@@ -141,10 +141,10 @@ boolean InputWindowEventHandler(void *arg, XEvent* event)
                 y = event->xbutton.y;
                 LightUIMouseClick(inputWindow->owner, inputWindow->window, &x, &y);
 
-                FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
+                FcitxInputContext* ic = FcitxInstanceGetCurrentIC(inputWindow->owner->owner);
 
                 if (ic)
-                    SetWindowOffset(inputWindow->owner->owner, ic, x, y);
+                    FcitxInstanceSetWindowOffset(inputWindow->owner->owner, ic, x, y);
 
                 DrawInputWindow(inputWindow);
             }
@@ -167,7 +167,7 @@ void DisplayInputWindow (InputWindow* inputWindow)
 void DrawInputWindow(InputWindow* inputWindow)
 {
     int lastW = inputWindow->iInputWindowWidth, lastH = inputWindow->iInputWindowHeight;
-    int cursorPos = NewMessageToOldStyleMessage(inputWindow->owner->owner, inputWindow->msgUp, inputWindow->msgDown);
+    int cursorPos = FcitxUINewMessageToOldStyleMessage(inputWindow->owner->owner, inputWindow->msgUp, inputWindow->msgDown);
     DrawInputBar(inputWindow, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight ,&inputWindow->iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
@@ -201,8 +201,8 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
     int x = 0, y = 0;
     GetScreenSize(inputWindow->owner, &dwidth, &dheight);
 
-    FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
-    GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(inputWindow->owner->owner);
+    FcitxInstanceGetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
 
     int iTempInputWindowX, iTempInputWindowY;
 

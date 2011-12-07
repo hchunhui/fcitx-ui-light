@@ -51,7 +51,7 @@ typedef enum _HIDE_MAINWINDOW {
  * @brief Config and Global State for Light UI
  **/
 typedef struct _FcitxLightUI {
-    GenericConfig gconfig;
+    FcitxGenericConfig gconfig;
     Display* dpy;
     int iScreen;
     Atom protocolAtom;
@@ -73,19 +73,20 @@ typedef struct _FcitxLightUI {
     char* skinType;
     int iMainWindowOffsetX;
     int iMainWindowOffsetY;
-    ConfigColor backcolor;
-    ConfigColor bordercolor;
-    ConfigColor fontColor[MESSAGE_TYPE_COUNT];
-    ConfigColor menuFontColor[2];
-    ConfigColor activeColor;
-    ConfigColor lineColor;
-    ConfigColor cursorColor;
+    FcitxConfigColor backcolor;
+    FcitxConfigColor bordercolor;
+    FcitxConfigColor fontColor[MESSAGE_TYPE_COUNT];
+    FcitxConfigColor menuFontColor[2];
+    FcitxConfigColor activeColor;
+    FcitxConfigColor lineColor;
+    FcitxConfigColor cursorColor;
 
     UT_array status;
     struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
     XftFont* xftfont;
     LightUIImage* imageTable;
+    boolean isfallback;
 } FcitxLightUI;
 
 void GetScreenSize(FcitxLightUI* lightui, int* width, int* height);
@@ -101,10 +102,10 @@ void ActivateWindow(Display *dpy, int iScreen, Window window);
 boolean LoadLightUIConfig(FcitxLightUI* lightui);
 void SaveLightUIConfig(FcitxLightUI* lightui);
 boolean WindowIsVisable(Display* dpy, Window window);
-GC LightUICreateGC(Display* dpy, Drawable drawable, ConfigColor color);
-void LightUISetGC(Display* dpy, GC gc, ConfigColor color);
+GC LightUICreateGC(Display* dpy, Drawable drawable, FcitxConfigColor color);
+void LightUISetGC(Display* dpy, GC gc, FcitxConfigColor color);
 
-#define GetPrivateStatus(status) ((FcitxLightUIStatus*)(status)->priv)
+#define GetPrivateStatus(status) ((FcitxLightUIStatus*)(status)->uipriv[lightui->isfallback])
 
 CONFIG_BINDING_DECLARE(FcitxLightUI);
 #endif

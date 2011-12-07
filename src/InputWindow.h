@@ -57,8 +57,8 @@ typedef struct _InputWindow {
 
     Display* dpy;
     int iScreen;
-    Messages* msgUp;
-    Messages* msgDown;
+    FcitxMessages* msgUp;
+    FcitxMessages* msgDown;
     struct _FcitxSkin* skin;
     struct _FcitxLightUI *owner;
     int pixmap;
