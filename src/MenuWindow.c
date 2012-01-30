@@ -146,8 +146,8 @@ boolean MenuWindowEventHandler(void *arg, XEvent* event)
             {
                 DrawXlibMenu(menu);
             }
-            FcitxMenuItem *shell = GetMenuItem(menu->menushell, i);
-            if (shell && shell->type == MENUTYPE_SUBMENU && shell->subMenu)
+            FcitxMenuItem *item = GetMenuItem(menu->menushell, i);
+            if (item && item->type == MENUTYPE_SUBMENU && item->subMenu)
             {
                 XlibMenu* subxlibmenu = (XlibMenu*) item->subMenu->uipriv[lightui->isfallback];
                 CloseOtherSubMenuWindow(menu, subxlibmenu);
@@ -204,6 +204,7 @@ void CloseAllMenuWindow(FcitxLightUI *lightui)
 
 void CloseOtherSubMenuWindow(XlibMenu *xlibMenu, XlibMenu* subMenu)
 {
+    FcitxLightUI* lightui = xlibMenu->owner;
     FcitxMenuItem *menu;
     for (menu = (FcitxMenuItem *) utarray_front(&xlibMenu->menushell->shell);
             menu != NULL;

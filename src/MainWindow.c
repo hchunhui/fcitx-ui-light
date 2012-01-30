@@ -55,7 +55,7 @@
 #define ICON_HEIGHT ICON_SIZE
 #define ICON_WIDTH ICON_SIZE
 
-#define MAIN_BAR_MAX_WIDTH 400
+#define MAIN_BAR_MAX_WIDTH 800
 #define MAIN_BAR_MAX_HEIGHT 400
 
 static boolean MainWindowEventHandler(void *arg, XEvent* event);
