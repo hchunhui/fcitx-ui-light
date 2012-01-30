@@ -121,7 +121,7 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
     if ( !lightui->bUseTrayIcon )
         return;
 
-    if (FcitxInstanceGetCurrentState(lightui->owner) == IS_ACTIVE)
+    if (FcitxInstanceGetCurrentStatev2(lightui->owner) == IS_ACTIVE)
         name = "tray_active";
     else
         name = "tray_inactive";
