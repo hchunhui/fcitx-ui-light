@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #ifndef _LIGHT_UI_H
 #define _LIGHT_UI_H
@@ -28,10 +28,6 @@
 #include "fcitx-utils/utarray.h"
 
 #include <X11/Xlib.h>
-
-#ifdef _ENABLE_PANGO
-#include <pango/pangocairo.h>
-#endif
 
 #include "draw.h"
 #include <fcitx/module/x11/x11stuff.h>
@@ -90,6 +86,7 @@ typedef struct _FcitxLightUI {
     FcitxUIMenu mainMenu;
     XftFont* xftfont;
     LightUIImage* imageTable;
+    boolean isfallback;
 } FcitxLightUI;
 
 void GetScreenSize(FcitxLightUI* lightui, int* width, int* height);
@@ -108,7 +105,7 @@ boolean WindowIsVisable(Display* dpy, Window window);
 GC LightUICreateGC(Display* dpy, Drawable drawable, FcitxConfigColor color);
 void LightUISetGC(Display* dpy, GC gc, FcitxConfigColor color);
 
-#define GetPrivateStatus(status) ((FcitxLightUIStatus*)(status)->uipriv[0])
+#define GetPrivateStatus(status) ((FcitxLightUIStatus*)(status)->uipriv[lightui->isfallback])
 
 CONFIG_BINDING_DECLARE(FcitxLightUI);
 #endif

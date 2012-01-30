@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 /**
  * @file   MainWindow.c
@@ -138,7 +138,6 @@ void DrawMainWindow (MainWindow* mainWindow)
 {
     FcitxInstance *instance = mainWindow->owner->owner;
     FcitxLightUI* lightui = mainWindow->owner;
-    char path[PATH_MAX];
 
     if ( mainWindow->bMainWindowHidden )
         return;
@@ -182,9 +181,11 @@ void DrawMainWindow (MainWindow* mainWindow)
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
+                char *path;
                 boolean active = status->getCurrentStatus(status->arg);
-                sprintf(path, "%s_%s", status->name, active ? "active": "inactive");
+                asprintf(&path, "%s_%s", status->name, active ? "active": "inactive");
                 LightUIImage* statusicon = LoadImage(lightui, path);
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 currentX += ICON_WIDTH;
@@ -222,8 +223,10 @@ void DrawMainWindow (MainWindow* mainWindow)
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
                 boolean active = status->getCurrentStatus(status->arg);
-                sprintf(path, "%s_%s", status->name, active ? "active": "inactive");
+                char* path;
+                asprintf(&path, "%s_%s", status->name, active ? "active": "inactive");
                 LightUIImage* statusicon = LoadImage(lightui, path);
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 DrawImage(mainWindow->dpy, mainWindow->pm_main_bar, statusicon, currentX, MarginTop, ICON_WIDTH, ICON_HEIGHT);

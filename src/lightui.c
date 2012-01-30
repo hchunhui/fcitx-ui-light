@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <X11/Xutil.h>
@@ -96,6 +96,7 @@ void* LightUICreate(FcitxInstance* instance)
 {
     FcitxModuleFunctionArg arg;
     FcitxLightUI* lightui = fcitx_utils_malloc0(sizeof(FcitxLightUI));
+    FcitxAddon* lightuiaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_LIGHT_UI_NAME);
     lightui->owner = instance;
     if (!LoadLightUIConfig(lightui))
     {
@@ -108,6 +109,7 @@ void* LightUICreate(FcitxInstance* instance)
         free(lightui);
         return NULL;
     }
+    lightui->isfallback = FcitxUIIsFallback(instance, lightuiaddon);
 
     lightui->iScreen = DefaultScreen(lightui->dpy);
     CreateFont(lightui);
@@ -192,16 +194,14 @@ static void LightUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
     FcitxLightUI* lightui = (FcitxLightUI*) arg;
     XlibMenu* xlibMenu = CreateXlibMenu(lightui);
-    menu->uipriv[0] = xlibMenu;
+    menu->uipriv[lightui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
 }
 
 static void LightUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
-    status->uipriv[0] = fcitx_utils_malloc0(sizeof(FcitxLightUIStatus));
-    char activename[PATH_MAX], inactivename[PATH_MAX];
-    sprintf(activename, "%s_active.png", status->name);
-    sprintf(inactivename, "%s_inactive.png", status->name);
+    FcitxLightUI* lightui = (FcitxLightUI*) arg;
+    status->uipriv[lightui->isfallback] = fcitx_utils_malloc0(sizeof(FcitxLightUIStatus));
 }
 
 static void LightUIOnInputFocus(void *arg)

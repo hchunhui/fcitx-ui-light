@@ -4,6 +4,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
 
+#include <fcitx-config/fcitx-config.h>
+
 struct _FcitxLightUI;
 
 void GetValidFont(const char* strUserLocale, char **font);
