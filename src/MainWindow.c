@@ -111,7 +111,7 @@ MainWindow* CreateMainWindow (FcitxLightUI* lightui)
 {
     MainWindow *mainWindow;
 
-    mainWindow = fcitx_malloc0(sizeof(MainWindow));
+    mainWindow = fcitx_utils_malloc0(sizeof(MainWindow));
     mainWindow->owner = lightui;
     InitMainWindow(mainWindow);
 
@@ -145,7 +145,7 @@ void DrawMainWindow (MainWindow* mainWindow)
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState(mainWindow->owner->owner) != IS_CLOSED)))
+    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) != IS_CLOSED)))
     {
             /* Only logo and input status is hard-code, other should be status */
             int currentX = MarginLeft;
@@ -161,11 +161,11 @@ void DrawMainWindow (MainWindow* mainWindow)
                     height = imageheight;
             }
 
-            if (GetCurrentState(instance) != IS_ACTIVE )
+            FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+            if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || im == NULL )
                 imicon = LoadImage(lightui, "en");
             else
             {
-                FcitxIM* im = GetCurrentIM(instance);
                 imicon = LoadImage(lightui, im->strIconName);
                 if (imicon == NULL)
                     imicon = LoadImage(lightui, "active");
@@ -303,16 +303,16 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
 
                     if (!LightUIMouseClick(mainWindow->owner, mainWindow->window, &lightui->iMainWindowOffsetX, &lightui->iMainWindowOffsetY))
                     {
-                        if (GetCurrentState(instance) == IS_CLOSED) {
-                            EnableIM(instance, GetCurrentIC(instance), false);
+                        if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
+                            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
                         }
                         else {
-                            CloseIM(instance, GetCurrentIC(instance));
+                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                         }
                     }
                     SaveLightUIConfig(lightui);
                 } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
-                    SwitchIM(instance, -1);
+                    FcitxInstanceSwitchIM(instance, -1);
                 } else {
                     FcitxUIStatus *status;
                     UT_array* uistats = FcitxInstanceGetUIStats(instance);
@@ -324,7 +324,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                         FcitxLightUIStatus* privstat = GetPrivateStatus(status);
                         if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat))
                         {
-                            UpdateStatus(instance, status->name);
+                            FcitxUIUpdateStatus(instance, status->name);
                         }
                     }
                 }

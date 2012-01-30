@@ -39,7 +39,7 @@
 
 struct _XlibMenu;
 struct _InputWindow;
-struct _Messages;
+struct _FcitxMessages;
 struct _FcitxLightUI;
 
 typedef struct _LightUIImage
@@ -51,7 +51,7 @@ typedef struct _LightUIImage
     Pixmap pixmask;
 } LightUIImage;
 
-void DrawInputBar(struct _InputWindow* inputWindow, int cursorPos, struct _Messages * msgup, struct _Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
+void DrawInputBar(struct _InputWindow* inputWindow, int cursorPos, struct _FcitxMessages * msgup, struct _FcitxMessages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
 void LoadInputMessage(struct _InputWindow* inputWindow, const char* font);
 void DrawImage(Display* dpy, Drawable drawable, LightUIImage* image, int x, int y, int w, int h);
 void ParsePlacement(UT_array* sps, char* placment);
@@ -59,8 +59,8 @@ void DrawResizableBackground(struct _FcitxLightUI* lightui,
                              Drawable drawable,
                              int height,
                              int width,
-                             ConfigColor background,
-                             ConfigColor border,
+                             FcitxConfigColor background,
+                             FcitxConfigColor border,
                              GC gc
                             );
 

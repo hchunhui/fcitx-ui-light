@@ -31,7 +31,9 @@
 
 #include <X11/Xlib.h>
 
-#include "fcitx/fcitx.h"
+#include <fcitx/fcitx.h>
+#include <fcitx/ui.h>
+
 #include <X11/Xft/Xft.h>
 
 #define ROUND_SIZE 80
@@ -57,8 +59,8 @@ typedef struct _InputWindow {
 
     Display* dpy;
     int iScreen;
-    Messages* msgUp;
-    Messages* msgDown;
+    FcitxMessages* msgUp;
+    FcitxMessages* msgDown;
     struct _FcitxSkin* skin;
     struct _FcitxLightUI *owner;
     int pixmap;
