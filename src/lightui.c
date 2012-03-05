@@ -272,7 +272,7 @@ boolean LoadLightUIConfig(FcitxLightUI* lightui)
         return false;
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-light-ui.config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-light-ui.config", "r", &file);
     FcitxLog(INFO, _("Load Config File %s"), file);
     free(file);
     if (!fp) {
@@ -294,7 +294,7 @@ void SaveLightUIConfig(FcitxLightUI *lightui)
 {
     FcitxConfigFileDesc* configDesc = GetLightUIDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-light-ui.config", "wt", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-light-ui.config", "w", &file);
     FcitxLog(INFO, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &lightui->gconfig, configDesc);
     free(file);
