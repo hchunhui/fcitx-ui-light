@@ -34,7 +34,7 @@
 #include "tray.h"
 #include "draw.h"
 #include "lightui.h"
-#include "fcitx/module/x11/x11stuff.h"
+#include "fcitx/module/x11/fcitx-x11.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"
@@ -95,10 +95,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
 TrayWindow* CreateTrayWindow(FcitxLightUI *lightui) {
     TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = lightui;
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = TrayEventHandler;
-    arg.args[1] = trayWindow;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    FcitxX11AddXEventHandler(lightui->owner, TrayEventHandler, trayWindow);
     InitTrayWindow(trayWindow);
     return trayWindow;
 }

@@ -30,7 +30,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
-#include "fcitx/module/x11/x11stuff.h"
+#include "fcitx/module/x11/fcitx-x11.h"
 
 #include "lightui.h"
 #include "fcitx-config/xdg.h"
@@ -94,7 +94,6 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* LightUICreate(FcitxInstance* instance)
 {
-    FcitxModuleFunctionArg arg;
     FcitxLightUI* lightui = fcitx_utils_malloc0(sizeof(FcitxLightUI));
     FcitxAddon* lightuiaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_LIGHT_UI_NAME);
     lightui->owner = instance;
@@ -103,7 +102,7 @@ void* LightUICreate(FcitxInstance* instance)
         free(lightui);
         return NULL;
     }
-    lightui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
+    lightui->dpy = FcitxX11GetDisplay(instance);
     if (lightui->dpy == NULL)
     {
         free(lightui);
@@ -153,11 +152,7 @@ void* LightUICreate(FcitxInstance* instance)
 
 void LightUISetWindowProperty(FcitxLightUI* lightui, Window window, FcitxXWindowType type, char *windowTitle)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = &type;
-    arg.args[2] = windowTitle;
-    InvokeFunction(lightui->owner, FCITX_X11, SETWINDOWPROP, arg);
+    FcitxX11SetWindowProp(lightui->owner, &window, &type, windowTitle);
 }
 
 static void LightUIInputReset(void *arg)
@@ -257,10 +252,7 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
 
 void GetScreenSize(FcitxLightUI* lightui, int* width, int* height)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = width;
-    arg.args[1] = height;
-    InvokeFunction(lightui->owner, FCITX_X11, GETSCREENSIZE, arg);
+    FcitxX11GetScreenSize(lightui->owner, width, height);
 }
 
 CONFIG_DESC_DEFINE(GetLightUIDesc, "fcitx-light-ui.desc")
@@ -311,13 +303,7 @@ boolean
 LightUIMouseClick(FcitxLightUI* lightui, Window window, int *x, int *y)
 {
     boolean            bMoved = false;
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = x;
-    arg.args[2] = y;
-    arg.args[3] = &bMoved;
-    InvokeFunction(lightui->owner, FCITX_X11, MOUSECLICK, arg);
-
+    FcitxX11MouseClick(lightui->owner, &window, x, y, &bMoved);
     return bMoved;
 }
 
@@ -390,19 +376,12 @@ LightUIInitWindowAttribute(FcitxLightUI* lightui, Visual ** vs, Colormap * cmap,
                              XSetWindowAttributes * attrib,
                              unsigned long *attribmask, int *depth)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = vs;
-    arg.args[1] = cmap;
-    arg.args[2] = attrib;
-    arg.args[3] = attribmask;
-    arg.args[4] = depth;
-    InvokeFunction(lightui->owner, FCITX_X11, INITWINDOWATTR, arg);
+    FcitxX11InitWindowAttribute(lightui->owner, vs, cmap, attrib, attribmask, depth);
 }
 
 Visual * LightUIFindARGBVisual (FcitxLightUI* lightui)
 {
-    FcitxModuleFunctionArg arg;
-    return InvokeFunction(lightui->owner, FCITX_X11, FINDARGBVISUAL, arg);
+    return FcitxX11FindARGBVisual(lightui->owner);
 }
 
 void LightUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)

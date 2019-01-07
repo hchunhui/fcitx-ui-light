@@ -26,7 +26,7 @@
 #include <fcitx-utils/log.h>
 #include <fcitx/ui.h>
 #include <fcitx/module.h>
-#include <fcitx/module/x11/x11stuff.h>
+#include <fcitx/module/x11/fcitx-x11.h>
 
 #include "draw.h"
 #include "lightui.h"
@@ -277,14 +277,9 @@ XlibMenu* CreateXlibMenu(FcitxLightUI *lightui)
     menu->owner = lightui;
     InitXlibMenu(menu);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = MenuWindowEventHandler;
-    arg.args[1] = menu;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    FcitxX11AddXEventHandler(lightui->owner, MenuWindowEventHandler, menu);
+    FcitxX11AddCompositeHandler(lightui->owner, ReloadXlibMenu, menu);
 
-    arg.args[0] = ReloadXlibMenu;
-    arg.args[1] = menu;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
     return menu;
 }
 

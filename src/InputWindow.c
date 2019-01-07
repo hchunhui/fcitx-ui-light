@@ -35,7 +35,7 @@
 #include "InputWindow.h"
 #include "lightui.h"
 #include "draw.h"
-#include <fcitx/module/x11/x11stuff.h>
+#include <fcitx/module/x11/fcitx-x11.h>
 #include "MainWindow.h"
 #include <fcitx-utils/log.h>
 
@@ -107,14 +107,8 @@ InputWindow* CreateInputWindow(FcitxLightUI *lightui)
     inputWindow->owner = lightui;
     InitInputWindow(inputWindow);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = InputWindowEventHandler;
-    arg.args[1] = inputWindow;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
-
-    arg.args[0] = ReloadInputWindow;
-    arg.args[1] = inputWindow;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
+    FcitxX11AddXEventHandler(lightui->owner, InputWindowEventHandler, inputWindow);
+    FcitxX11AddCompositeHandler(lightui->owner, ReloadInputWindow, inputWindow);
 
     inputWindow->msgUp = FcitxMessagesNew();
     inputWindow->msgDown = FcitxMessagesNew();

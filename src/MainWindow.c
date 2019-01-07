@@ -39,7 +39,7 @@
 
 #include "MainWindow.h"
 #include "fcitx-utils/log.h"
-#include "fcitx/module/x11/x11stuff.h"
+#include "fcitx/module/x11/fcitx-x11.h"
 #include "lightui.h"
 #include "draw.h"
 #include "MenuWindow.h"
@@ -115,14 +115,9 @@ MainWindow* CreateMainWindow (FcitxLightUI* lightui)
     mainWindow->owner = lightui;
     InitMainWindow(mainWindow);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = MainWindowEventHandler;
-    arg.args[1] = mainWindow;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    FcitxX11AddXEventHandler(lightui->owner, MainWindowEventHandler, mainWindow);
+    FcitxX11AddCompositeHandler(lightui->owner, ReloadMainWindow, mainWindow);
 
-    arg.args[0] = ReloadMainWindow;
-    arg.args[1] = mainWindow;
-    InvokeFunction(lightui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
     return mainWindow;
 }
 
