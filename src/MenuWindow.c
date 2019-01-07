@@ -497,9 +497,9 @@ void ReloadXlibMenu(void* arg, boolean enabled)
 {
     XlibMenu* menu = (XlibMenu*) arg;
     boolean visable = WindowIsVisable(menu->owner->dpy, menu->menuWindow);
+    XftDrawDestroy(menu->xftDraw);
     XFreePixmap(menu->owner->dpy, menu->pixmap);
     XDestroyWindow(menu->owner->dpy, menu->menuWindow);
-    XftDrawDestroy(menu->xftDraw);
 
     menu->pixmap = None;
     menu->menuWindow = None;
@@ -525,6 +525,19 @@ void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)
         sub->iPosY = dheight - sub->height;
 
     XMoveWindow(parent->owner->dpy, sub->menuWindow, sub->iPosX, sub->iPosY);
+}
+
+void XlibMenuDestroy(XlibMenu* menu)
+{
+    FcitxLightUI* lightui = menu->owner;
+    FcitxX11RemoveXEventHandler(lightui->owner, menu);
+    FcitxX11RemoveCompositeHandler(lightui->owner, menu);
+
+    XftDrawDestroy(menu->xftDraw);
+    XFreePixmap(menu->owner->dpy, menu->pixmap);
+    XDestroyWindow(menu->owner->dpy, menu->menuWindow);
+
+    free(menu);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

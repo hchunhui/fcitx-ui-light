@@ -40,10 +40,6 @@ typedef struct _XlibMenu
     int height;
     Window menuWindow;
     Pixmap pixmap;
-    XColor bgcolor;
-    XColor bgselectcolor;
-    XColor charcolor;
-    XColor charselectcolor;
     struct _FcitxUIMenu *menushell;
     struct _FcitxLightUI* owner;
     XftDraw* xftDraw;
@@ -54,6 +50,7 @@ XlibMenu* CreateXlibMenu(struct _FcitxLightUI* lightui);
 void GetMenuSize(XlibMenu * menu);
 void DrawXlibMenu(XlibMenu * menu);
 void DisplayXlibMenu(XlibMenu * menu);
+void XlibMenuDestroy(XlibMenu* menu);
 
 #endif
 

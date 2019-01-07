@@ -46,6 +46,7 @@
 #include "font.h"
 
 struct _FcitxSkin;
+static void UpdateMainMenu(FcitxUIMenu* menu);
 boolean MainMenuAction(FcitxUIMenu* menu, int index);
 
 static void* LightUICreate(FcitxInstance* instance);
@@ -53,8 +54,11 @@ static void LightUICloseInputWindow(void* arg);
 static void LightUIShowInputWindow(void* arg);
 static void LightUIMoveInputWindow(void* arg);
 static void LightUIRegisterMenu(void *arg, FcitxUIMenu* menu);
+static void LightUIUnRegisterMenu(void *arg, FcitxUIMenu* menu);
 static void LightUIUpdateStatus(void *arg, FcitxUIStatus* status);
 static void LightUIRegisterStatus(void *arg, FcitxUIStatus* status);
+static void LightUIUpdateComplexStatus(void *arg, FcitxUIComplexStatus* status);
+static void LightUIRegisterComplexStatus(void *arg, FcitxUIComplexStatus* status);
 static void LightUIOnInputFocus(void *arg);
 static void LightUIOnInputUnFocus(void *arg);
 static void LightUIOnTriggerOn(void *arg);
@@ -84,9 +88,9 @@ FcitxUI ui = {
     NULL,
     NULL,
     NULL,
-    NULL,
-    NULL,
-    NULL
+    LightUIRegisterComplexStatus,
+    LightUIUpdateComplexStatus,
+    LightUIUnRegisterMenu,
 };
 
 FCITX_EXPORT_API
@@ -118,21 +122,7 @@ void* LightUICreate(FcitxInstance* instance)
 
     /* Main Menu Initial */
     FcitxMenuInit(&lightui->mainMenu);
-
-    FcitxUIMenu **menupp;
-    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
-    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
-            menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
-        )
-    {
-        FcitxUIMenu * menup = *menupp;
-        if (!menup->isSubMenu)
-            FcitxMenuAddMenuItem(&lightui->mainMenu, menup->name, MENUTYPE_SUBMENU, menup);
-    }
-    FcitxMenuAddMenuItem(&lightui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
-    FcitxMenuAddMenuItem(&lightui->mainMenu, _("Configure"), MENUTYPE_SIMPLE, NULL);
-    FcitxMenuAddMenuItem(&lightui->mainMenu, _("Exit"), MENUTYPE_SIMPLE, NULL);
+    lightui->mainMenu.UpdateMenu = UpdateMainMenu;
     lightui->mainMenu.MenuAction = MainMenuAction;
     lightui->mainMenu.priv = lightui;
     lightui->mainMenu.mark = -1;
@@ -185,12 +175,30 @@ static void LightUIUpdateStatus(void *arg, FcitxUIStatus* status)
     DrawMainWindow(lightui->mainWindow);
 }
 
+void LightUIUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxLightUI* lightui = (FcitxLightUI*) arg;
+    DrawMainWindow(lightui->mainWindow);
+}
+
+void LightUIRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxLightUI* lightui = (FcitxLightUI*) arg;
+    status->uipriv[lightui->isfallback] = fcitx_utils_malloc0(sizeof(FcitxLightUIStatus));
+}
+
 static void LightUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
     FcitxLightUI* lightui = (FcitxLightUI*) arg;
     XlibMenu* xlibMenu = CreateXlibMenu(lightui);
     menu->uipriv[lightui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
+}
+
+static void LightUIUnRegisterMenu(void *arg, FcitxUIMenu* menu)
+{
+    FcitxLightUI* lightui = (FcitxLightUI*) arg;
+    XlibMenuDestroy((XlibMenu*) menu->uipriv[lightui->isfallback]);
 }
 
 static void LightUIRegisterStatus(void *arg, FcitxUIStatus* status)
@@ -331,41 +339,110 @@ void LightUIDisplayMessage(void* arg, char* title, char** msg, int length)
     return;
 }
 
+static void UpdateMainMenu(FcitxUIMenu* menu)
+{
+    FcitxLightUI* lightui = (FcitxLightUI*) menu->priv;
+    FcitxInstance* instance = lightui->owner;
+    FcitxMenuClear(menu);
+
+    FcitxMenuAddMenuItem(menu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+    boolean flag = false;
+
+    FcitxUIStatus* status;
+    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+    for (status = (FcitxUIStatus*) utarray_front(uistats);
+            status != NULL;
+            status = (FcitxUIStatus*) utarray_next(uistats, status)
+        ) {
+        FcitxLightUIStatus* privstat =  GetPrivateStatus(status);
+        if (privstat == NULL || !status->visible)
+            continue;
+
+        flag = true;
+        FcitxMenuAddMenuItemWithData(menu, status->shortDescription, MENUTYPE_SIMPLE, NULL, strdup(status->name));
+    }
+
+    FcitxUIComplexStatus* compstatus;
+    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+    for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+            compstatus != NULL;
+            compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+        ) {
+        FcitxLightUIStatus* privstat =  GetPrivateStatus(compstatus);
+        if (privstat == NULL || !compstatus->visible)
+            continue;
+        if (FcitxUIGetMenuByStatusName(instance, compstatus->name))
+            continue;
+
+        flag = true;
+        FcitxMenuAddMenuItemWithData(menu, compstatus->shortDescription, MENUTYPE_SIMPLE, NULL, strdup(compstatus->name));
+    }
+
+    if (flag)
+        FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+
+    FcitxUIMenu **menupp;
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
+            menupp != NULL;
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
+        ) {
+        FcitxUIMenu * menup = *menupp;
+        if (menup->isSubMenu)
+            continue;
+
+        if (!menup->visible)
+            continue;
+
+        if (menup->candStatusBind) {
+            FcitxUIComplexStatus* compStatus = FcitxUIGetComplexStatusByName(instance, menup->candStatusBind);
+            if (compStatus) {
+                if (!compStatus->visible)
+                    continue;
+            }
+        }
+
+        FcitxMenuAddMenuItem(menu, menup->name, MENUTYPE_SUBMENU, menup);
+    }
+    FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Configure Current Input Method"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Configure"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Restart"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Exit"), MENUTYPE_SIMPLE, NULL);
+}
+
 boolean MainMenuAction(FcitxUIMenu* menu, int index)
 {
     FcitxLightUI* lightui = (FcitxLightUI*) menu->priv;
+    FcitxInstance* instance = lightui->owner;
     int length = utarray_len(&menu->shell);
-    if (index == 0)
-    {
-    }
-    else if (index == length - 1) /* Exit */
-    {
+    if (index == 0) {
+        char* args[] = {
+            "xdg-open",
+            "http://fcitx-im.org/",
+            0
+        };
+        fcitx_utils_start_process(args);
+    } else if (index == length - 1) { /* Exit */
         FcitxInstanceEnd(lightui->owner);
-    }
-    else if (index == length - 2) /* Configuration */
-    {
-        pid_t id;
-
-        id = fork();
-
-        if (id < 0)
-            FcitxLog(ERROR, _("Unable to create process"));
-        else if (id == 0)
-        {
-            id = fork();
-
-            if (id < 0)
-            {
-                FcitxLog(ERROR, _("Unable to create process"));
-                exit(1);
-            }
-            else if (id > 0)
-                exit(0);
-            else
-            {
-                execl(BINDIR "/fcitx-configtool", "fcitx-configtool", NULL);
-                exit(0);
-            }
+    } else if (index == length - 2) { /* Restart */
+        FcitxInstanceRestart(instance);
+    } else if (index == length - 3) { /* Configuration */
+        fcitx_utils_launch_configure_tool();
+    } else if (index == length - 4) { /* Configuration */
+        FcitxIM* im = FcitxInstanceGetCurrentIM(lightui->owner);
+        if (im && im->owner) {
+            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
+        }
+        else {
+            fcitx_utils_launch_configure_tool();
+        }
+    } else {
+        FcitxMenuItem* item = (FcitxMenuItem*) utarray_eltptr(&menu->shell, index);
+        if (item && item->type == MENUTYPE_SIMPLE && item->data) {
+            const char* name = item->data;
+            FcitxUIUpdateStatus(instance, name);
         }
     }
     return true;
