@@ -90,7 +90,7 @@ typedef struct _FcitxLightUI {
     boolean isfallback;
 } FcitxLightUI;
 
-void GetScreenSize(FcitxLightUI* lightui, int* width, int* height);
+FcitxRect GetScreenGeometry(FcitxLightUI* lightui, int x, int y);
 void
 LightUIInitWindowAttribute(FcitxLightUI* lightui, Visual ** vs, Colormap * cmap,
                              XSetWindowAttributes * attrib,

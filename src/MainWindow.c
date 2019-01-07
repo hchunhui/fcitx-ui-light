@@ -72,12 +72,9 @@ void InitMainWindow(MainWindow* mainWindow)
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
     char        strWindowName[] = "Fcitx Main Window";
-    int swidth, sheight;
     Display* dpy = lightui->dpy;
     int iScreen = lightui->iScreen;
     mainWindow->dpy = dpy;
-
-    GetScreenSize(lightui, &swidth, &sheight);
 
     vs= NULL;
 
@@ -331,25 +328,34 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
             case Button3:
             {
                 XlibMenu *mainMenuWindow = lightui->mainMenuWindow;
-                unsigned int height;
-                int sheight;
                 XWindowAttributes attr;
-                GetMenuSize(mainMenuWindow);
-                GetScreenSize(lightui, NULL, &sheight);
-                XGetWindowAttributes(lightui->dpy, mainWindow->window, &attr);
-                height = attr.height;
+		GetMenuSize(mainMenuWindow);
+		int x = lightui->iMainWindowOffsetX;
+		int y = lightui->iMainWindowOffsetY;
+		FcitxRect rect = GetScreenGeometry(lightui, x, y);
+		XGetWindowAttributes(lightui->dpy, mainWindow->window, &attr);
 
-                mainMenuWindow->iPosX = lightui->iMainWindowOffsetX;
-                mainMenuWindow->iPosY =
-                    lightui->iMainWindowOffsetY +
-                    height;
-                if ((mainMenuWindow->iPosY + mainMenuWindow->height) >
-                        sheight)
-                    mainMenuWindow->iPosY = lightui->iMainWindowOffsetY - 5 - mainMenuWindow->height;
+		if (x < rect.x1)
+			x = rect.x1;
+
+		if (y < rect.y1)
+			y = rect.y1;
+
+		if ((x + attr.width) > rect.x2)
+			x = rect.x2 - attr.width;
+
+		if ((y + attr.height) > rect.y2) {
+			if (y > rect.y2)
+				y = rect.y2 - attr.height;
+			else
+				y = y - attr.height;
+		}
+
+                mainMenuWindow->iPosX = x;
+                mainMenuWindow->iPosY = y;
 
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);
-
             }
             break;
 

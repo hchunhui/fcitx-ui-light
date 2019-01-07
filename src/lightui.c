@@ -258,9 +258,11 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
     XSync(dpy, False);
 }
 
-void GetScreenSize(FcitxLightUI* lightui, int* width, int* height)
+FcitxRect GetScreenGeometry(FcitxLightUI* lightui, int x, int y)
 {
-    FcitxX11GetScreenSize(lightui->owner, width, height);
+    FcitxRect result = { 0, 0 , 0 , 0 };
+    FcitxX11GetScreenGeometry(lightui->owner, &x, &y, &result);
+    return result;
 }
 
 CONFIG_DESC_DEFINE(GetLightUIDesc, "fcitx-light-ui.desc")

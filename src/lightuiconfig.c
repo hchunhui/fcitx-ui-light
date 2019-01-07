@@ -2,12 +2,10 @@
 #include "lightui.h"
 
 static void FilterCopyUseTray(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void *value, FcitxConfigSync sync, void *filterArg);
-static void FilterScreenSizeX(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void *value, FcitxConfigSync sync, void *filterArg);
-static void FilterScreenSizeY(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void *value, FcitxConfigSync sync, void *filterArg);
 
 CONFIG_BINDING_BEGIN(FcitxLightUI)
-CONFIG_BINDING_REGISTER_WITH_FILTER("LightUI", "MainWindowOffsetX", iMainWindowOffsetX, FilterScreenSizeX)
-CONFIG_BINDING_REGISTER_WITH_FILTER("LightUI", "MainWindowOffsetY", iMainWindowOffsetY, FilterScreenSizeY)
+CONFIG_BINDING_REGISTER("LightUI", "MainWindowOffsetX", iMainWindowOffsetX)
+CONFIG_BINDING_REGISTER("LightUI", "MainWindowOffsetY", iMainWindowOffsetY)
 CONFIG_BINDING_REGISTER("LightUI", "Font", font)
 #ifndef _ENABLE_PANGO
 CONFIG_BINDING_REGISTER("LightUI", "FontLocale", strUserLocale)
@@ -46,49 +44,6 @@ void FilterCopyUseTray(FcitxGenericConfig* config, FcitxConfigGroup *group, Fcit
             lightui->bUseTrayIcon = *b;
         firstRunOnUseTray = false;
     }
-}
-
-static void FilterScreenSizeX(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void *value, FcitxConfigSync sync, void *filterArg)
-{
-    int* X = (int*) value;
-    FcitxLightUI *lightui = (FcitxLightUI*) config;
-    int width, height;
-    GetScreenSize(lightui, &width, &height);
-
-    switch (sync)
-    {
-    case Raw2Value:
-        if (*X >= width)
-            *X = width - 10;
-        if (*X < 0)
-            *X = 0;
-        break;
-    case Value2Raw:
-        break;
-    }
-
-}
-
-static void FilterScreenSizeY(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void *value, FcitxConfigSync sync, void *filterArg)
-{
-    int* Y = (int*) value;
-    FcitxLightUI *lightui = (FcitxLightUI*) config;
-    int width, height;
-    GetScreenSize(lightui, &width, &height);
-
-    switch (sync)
-    {
-    case Raw2Value:
-        if (*Y >= height)
-            *Y = height - 10;
-        if (*Y < 0)
-            *Y = 0;
-        break;
-    case Value2Raw:
-        break;
-    }
-
-
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

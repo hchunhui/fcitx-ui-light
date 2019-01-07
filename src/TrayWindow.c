@@ -194,24 +194,29 @@ boolean TrayEventHandler(void *arg, XEvent* event)
             case Button3:
             {
                 XlibMenu *mainMenuWindow = lightui->mainMenuWindow;
-                int dwidth, dheight;
-                GetScreenSize(lightui, &dwidth, &dheight);
-                GetMenuSize(mainMenuWindow);
-                if (event->xbutton.x_root - event->xbutton.x +
-                        mainMenuWindow->width >= dwidth)
-                    mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
-                else
-                    mainMenuWindow->iPosX =
-                        event->xbutton.x_root - event->xbutton.x;
+		GetMenuSize(mainMenuWindow);
+		int x = event->xbutton.x_root + event->xbutton.x;
+		int y = event->xbutton.y_root + event->xbutton.y;
+		FcitxRect rect = GetScreenGeometry(lightui, x, y);
 
-                // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
-                if (event->xbutton.y_root + mainMenuWindow->height -
-                        event->xbutton.y >= dheight)
-                    mainMenuWindow->iPosY =
-                        dheight - mainMenuWindow->height -
-                        event->xbutton.y - 15;
-                else
-                    mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
+		if (x < rect.x1)
+			x = rect.x1;
+
+		if (y < rect.y1)
+			y = rect.y1;
+
+		if ((x + mainMenuWindow->width) > rect.x2)
+			x = rect.x2 - mainMenuWindow->width;
+
+		if ((y + mainMenuWindow->height) > rect.y2) {
+			if (y > rect.y2)
+				y = rect.y2 - mainMenuWindow->height;
+			else
+				y = y - mainMenuWindow->height;
+		}
+
+                mainMenuWindow->iPosX = x;
+                mainMenuWindow->iPosY = y;
 
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);

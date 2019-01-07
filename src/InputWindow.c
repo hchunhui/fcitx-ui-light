@@ -191,33 +191,32 @@ void DrawInputWindow(InputWindow* inputWindow)
 
 void MoveInputWindowInternal(InputWindow* inputWindow)
 {
-    int dwidth, dheight;
-    int x = 0, y = 0;
-    GetScreenSize(inputWindow->owner, &dwidth, &dheight);
+    int x = 0, y = 0, w = 0, h = 0;
 
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(inputWindow->owner->owner);
-    FcitxInstanceGetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
+    FcitxInstanceGetWindowRect(inputWindow->owner->owner, ic, &x, &y, &w, &h);
+    FcitxRect rect = GetScreenGeometry(inputWindow->owner, x, y);
 
     int iTempInputWindowX, iTempInputWindowY;
 
-    if (x < 0)
-        iTempInputWindowX = 0;
+    if (x < rect.x1)
+        iTempInputWindowX = rect.x1;
     else
         iTempInputWindowX = x + inputWindow->iOffsetX;
 
-    if (y < 0)
-        iTempInputWindowY = 0;
+    if (y < rect.y1)
+        iTempInputWindowY = rect.y1;
     else
-        iTempInputWindowY = y + inputWindow->iOffsetY;
+        iTempInputWindowY = y + h + inputWindow->iOffsetY;
 
-    if ((iTempInputWindowX + inputWindow->iInputWindowWidth) > dwidth)
-        iTempInputWindowX = dwidth - inputWindow->iInputWindowWidth;
+    if ((iTempInputWindowX + inputWindow->iInputWindowWidth) > rect.x2)
+        iTempInputWindowX = rect.x2 - inputWindow->iInputWindowWidth;
 
-    if ((iTempInputWindowY + inputWindow->iInputWindowHeight) > dheight) {
-        if ( iTempInputWindowY > dheight )
-            iTempInputWindowY = dheight - 2 * inputWindow->iInputWindowHeight;
+    if ((iTempInputWindowY + inputWindow->iInputWindowHeight) > rect.y2) {
+        if ( iTempInputWindowY > rect.y2 )
+            iTempInputWindowY = rect.y2 - inputWindow->iInputWindowHeight - 40;
         else
-            iTempInputWindowY = iTempInputWindowY - 2 * inputWindow->iInputWindowHeight;
+            iTempInputWindowY = iTempInputWindowY - inputWindow->iInputWindowHeight - ((h == 0)?40:h) - 2 * inputWindow->iOffsetY;
     }
     XMoveWindow (inputWindow->dpy, inputWindow->window, iTempInputWindowX, iTempInputWindowY);
 }

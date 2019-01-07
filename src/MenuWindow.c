@@ -511,18 +511,18 @@ void ReloadXlibMenu(void* arg, boolean enabled)
 
 void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)
 {
-    int dwidth, dheight;
-    GetScreenSize(parent->owner, &dwidth, &dheight);
+    FcitxRect rect = GetScreenGeometry(parent->owner, sub->iPosX, sub->iPosY);
+
     FcitxMenuUpdate(sub->menushell);
     GetMenuSize(sub);
     sub->iPosX=parent->iPosX + parent->width - MenuMarginRight - 4;
     sub->iPosY=parent->iPosY + offseth - MenuMarginTop;
 
-    if ( sub->iPosX + sub->width > dwidth)
+    if ( sub->iPosX + sub->width > rect.x2)
         sub->iPosX=parent->iPosX - sub->width + MenuMarginLeft + 4;
 
-    if ( sub->iPosY + sub->height > dheight)
-        sub->iPosY = dheight - sub->height;
+    if ( sub->iPosY + sub->height > rect.y2)
+        sub->iPosY = rect.y2 - sub->height;
 
     XMoveWindow(parent->owner->dpy, sub->menuWindow, sub->iPosX, sub->iPosY);
 }
