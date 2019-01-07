@@ -40,6 +40,7 @@
 struct _MainWindow;
 struct _AboutWindow;
 struct _FcitxLightUIStatus;
+struct _XFont;
 
 typedef enum _HIDE_MAINWINDOW {
     HM_SHOW = 0,
@@ -84,7 +85,7 @@ typedef struct _FcitxLightUI {
     UT_array status;
     struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
-    XftFont* xftfont;
+    struct _XFont* xftfont;
     LightUIImage* imageTable;
     boolean isfallback;
 } FcitxLightUI;
